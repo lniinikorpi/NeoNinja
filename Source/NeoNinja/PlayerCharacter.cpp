@@ -60,8 +60,9 @@ void APlayerCharacter::BeginPlay()
 		GunSpawnTransform.SetRotation(GetMesh()->GetSocketRotation(WeaponSocket).Quaternion());
 		AGunBase* base = GetWorld()->SpawnActor<AGunBase>(SpawnedWeapon, GunSpawnTransform, SpawnParameters);
 		if (base) {
-			FAttachmentTransformRules rules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::SnapToTarget, false);
-			base->AttachToActor(this, rules);
+			FAttachmentTransformRules rules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::SnapToTarget, false);
+			base->AttachToComponent(GetMesh(), rules, WeaponSocket);
+			//base->AttachToActor(this, rules);
 		}
 		CurrentWeapon = base;
 	}

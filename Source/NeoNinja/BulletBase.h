@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/SceneComponent.h"
 #include "BulletBase.generated.h"
 
 UCLASS()
@@ -17,8 +19,13 @@ public:
 	ABulletBase();
 	UPROPERTY(VisibleAnywhere, Category = Bullet)
 		UStaticMeshComponent* mesh;
-	UPROPERTY(VisibleAnywhere, Category = Bullet)
+	UPROPERTY(EditAnywhere, Category = Bullet)
 		UProjectileMovementComponent* projectileMovement;
+	/*UPROPERTY(EditAnywhere, Category = Buller)
+		UCapsuleComponent* capsule;*/
+	/*UPROPERTY(EditAnywhere, Category = Buller)
+		USceneComponent* Root;*/
+
 
 protected:
 	// Called when the game starts or when spawned

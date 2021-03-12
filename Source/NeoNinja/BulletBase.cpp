@@ -10,7 +10,10 @@ ABulletBase::ABulletBase()
 	PrimaryActorTick.bCanEverTick = true;
 	projectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-
+	//capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	/*Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SetRootComponent(Root);
+	*/
 }
 
 // Called when the game starts or when spawned
