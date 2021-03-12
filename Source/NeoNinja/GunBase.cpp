@@ -2,6 +2,7 @@
 
 
 #include "GunBase.h"
+#include "GameFramework/Actor.h"
 
 // Sets default values
 AGunBase::AGunBase()
@@ -9,24 +10,44 @@ AGunBase::AGunBase()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	isFiring = false;
+	FireRate = 3;
 
 }
 
 void AGunBase::Shoot()
 {
+	isFiring = true;
+}
+
+void AGunBase::UnShoot() {
+	isFiring = false;
+}
+
+void AGunBase::FireWeapon() {
+
+	if (IsAutomatic) {
+		SpawnProjectile();
+	}
+	else {
+		SpawnProjectile();
+		UnShoot();
+	}
+}
+
+void AGunBase::SpawnProjectile() {
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParameters.bNoFail = true;
 	SpawnParameters.Owner = this;
-
-	FTransform BulletSpawnTransform;
 	if (Mesh->GetSocketByName("Muzzle"))
 	{
+		FTransform BulletSpawnTransform;
 		BulletSpawnTransform.SetLocation(Mesh->GetSocketLocation("Muzzle"));
-		BulletSpawnTransform.SetRotation(Mesh->GetSocketRotation("Muzzle").Quaternion());
+		FQuat rotation = Mesh->GetSocketRotation("Muzzle").Quaternion();
+		rotation.X = 0;
+		BulletSpawnTransform.SetRotation(rotation);
 		ABulletBase* base = GetWorld()->SpawnActor<ABulletBase>(bullet, BulletSpawnTransform, SpawnParameters);
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *Mesh->GetSocketLocation("Muzzle").ToString());
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *base->K2_GetActorLocation().ToString());
 	}
 }
 
@@ -41,6 +62,13 @@ void AGunBase::BeginPlay()
 void AGunBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (isFiring)
+	{
+		if (GetGameTimeSinceCreation() > canFire) {
+			canFire = GetGameTimeSinceCreation() + 1 / FireRate;
+			FireWeapon();
+		}
+	}
 
 }
 

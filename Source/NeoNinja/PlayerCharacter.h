@@ -30,6 +30,8 @@ public:
 
 	UFUNCTION()
 		void Shoot();
+	UFUNCTION()
+		void UnShoot();
 
 protected:
 	// Called when the game starts or when spawned

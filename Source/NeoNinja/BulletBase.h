@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/SceneComponent.h"
 #include "BulletBase.generated.h"
 
 UCLASS()
@@ -17,14 +16,12 @@ class NEONINJA_API ABulletBase : public AActor
 public:
 	// Sets default values for this actor's properties
 	ABulletBase();
-	UPROPERTY(VisibleAnywhere, Category = Bullet)
-		UStaticMeshComponent* mesh;
+	/*UPROPERTY(VisibleAnywhere, Category = Bullet)
+		UStaticMeshComponent* mesh;*/
 	UPROPERTY(EditAnywhere, Category = Bullet)
 		UProjectileMovementComponent* projectileMovement;
-	/*UPROPERTY(EditAnywhere, Category = Buller)
-		UCapsuleComponent* capsule;*/
-	/*UPROPERTY(EditAnywhere, Category = Buller)
-		USceneComponent* Root;*/
+	UPROPERTY(EditAnywhere, Category = Buller)
+		UCapsuleComponent* capsule;
 
 
 protected:

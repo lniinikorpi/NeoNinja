@@ -117,6 +117,10 @@ void APlayerCharacter::Shoot()
 {
 	CurrentWeapon->Shoot();
 }
+void APlayerCharacter::UnShoot()
+{
+	CurrentWeapon->UnShoot();
+}
 
 void APlayerCharacter::TurnAtRate(float rate)
 {
@@ -153,6 +157,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &APlayerCharacter::Shoot);
+	PlayerInputComponent->BindAction("UnShoot", IE_Released, this, &APlayerCharacter::UnShoot);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);

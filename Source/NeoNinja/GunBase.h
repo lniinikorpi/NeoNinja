@@ -15,10 +15,21 @@ class NEONINJA_API AGunBase : public AActor
 public:
 	// Sets default values for this actor's properties
 	AGunBase();
-	UPROPERTY(EditAnywhere, Category = Gun)
+	UPROPERTY(EditAnywhere, Category = Components)
 		class USkeletalMeshComponent* Mesh;
-	UPROPERTY(EditAnywhere, Category = Gun)
+	UPROPERTY(EditAnywhere, Category = Components)
 		TSubclassOf<class ABulletBase> bullet;
+	UPROPERTY(EditAnywhere, Category = Stats)
+		bool IsAutomatic;
+	UPROPERTY(EditAnywhere, Category = Stats, meta = (ToolTip = "Rounds per second"))
+		float FireRate;
+
+	float canFire;
+	bool isFiring;
+
+	void FireWeapon();
+	void SpawnProjectile();
+	void UnShoot();
 
 
 protected:
