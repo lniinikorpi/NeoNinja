@@ -13,10 +13,9 @@ ABulletBase::ABulletBase()
 	//mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
 	RootComponent = capsule;
-	
 	projectileMovement->UpdatedComponent = capsule;
-	projectileMovement->InitialSpeed = 3000.f;
-	projectileMovement->MaxSpeed = 3000.f;
+	projectileMovement->InitialSpeed = 1000.f;
+	projectileMovement->MaxSpeed = 1000.f;
 	projectileMovement->bRotationFollowsVelocity = true;
 	projectileMovement->bShouldBounce = true;
 }
@@ -26,6 +25,13 @@ void ABulletBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+}
+
+void ABulletBase::SetSpeed(float value) {
+	BulletSpeedMultiplier = value;
+	projectileMovement->MaxSpeed = projectileMovement->InitialSpeed * BulletSpeedMultiplier;
+
+	projectileMovement->Velocity *= BulletSpeedMultiplier;
 }
 
 // Called every frame

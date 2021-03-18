@@ -20,13 +20,16 @@ public:
 		UStaticMeshComponent* mesh;*/
 	UPROPERTY(EditAnywhere, Category = Bullet)
 		UProjectileMovementComponent* projectileMovement;
-	UPROPERTY(EditAnywhere, Category = Buller)
+	UPROPERTY(EditAnywhere, Category = Bullet)
 		UCapsuleComponent* capsule;
+	void SetSpeed(float value);
 
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	float BulletSpeedMultiplier;
 
 public:
 	// Called every frame

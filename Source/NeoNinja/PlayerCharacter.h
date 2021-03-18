@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GunBase.h"
+#include "WeaponNode.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -25,6 +26,14 @@ public:
 		float BaseLookUpRate;
 	UPROPERTY(EditAnywhere, Category = Weapon)
 		TSubclassOf<class AGunBase> SpawnedWeapon;
+	UPROPERTY(EditAnywhere, Category = Weapon)
+		TSubclassOf<class AWeaponNode> RevolverNode;
+	UPROPERTY(EditAnywhere, Category = Weapon)
+		TSubclassOf<class AWeaponNode> RifleNode;
+	UPROPERTY(EditAnywhere, Category = Weapon)
+		TSubclassOf<class AWeaponNode> ShotgunNode;
+
+
 
 	AGunBase* CurrentWeapon;
 
@@ -32,6 +41,12 @@ public:
 		void Shoot();
 	UFUNCTION()
 		void UnShoot();
+	UFUNCTION()
+		void SetRifleNode();
+	UFUNCTION()
+		void SetRevolverNode();
+	UFUNCTION()
+		void SetShotgunNode();
 
 protected:
 	// Called when the game starts or when spawned

@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SceneComponent.h"
+#include "WeaponNode.h"
 #include "GunBase.h"
 
 // Sets default values
@@ -122,6 +123,26 @@ void APlayerCharacter::UnShoot()
 	CurrentWeapon->UnShoot();
 }
 
+void APlayerCharacter::SetRifleNode()
+{
+	if (CurrentWeapon != nullptr) {
+		CurrentWeapon->SetNode(RifleNode);
+	}
+}
+
+void APlayerCharacter::SetRevolverNode()
+{
+	if (CurrentWeapon != nullptr) {
+		CurrentWeapon->SetNode(RevolverNode);
+	}
+}
+void APlayerCharacter::SetShotgunNode()
+{
+	if (CurrentWeapon != nullptr) {
+		CurrentWeapon->SetNode(ShotgunNode);
+	}
+}
+
 void APlayerCharacter::TurnAtRate(float rate)
 {
 	AddControllerYawInput(rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
@@ -158,6 +179,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &APlayerCharacter::Shoot);
 	PlayerInputComponent->BindAction("UnShoot", IE_Released, this, &APlayerCharacter::UnShoot);
+	PlayerInputComponent->BindAction("SetRifleNode", IE_Pressed, this, &APlayerCharacter::SetRifleNode);
+	PlayerInputComponent->BindAction("SetRevolverNode", IE_Pressed, this, &APlayerCharacter::SetRevolverNode);
+	PlayerInputComponent->BindAction("SetShotgunNode", IE_Pressed, this, &APlayerCharacter::SetShotgunNode);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
