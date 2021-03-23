@@ -4,9 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "GunBase.h"
 #include "WeaponNode.h"
 #include "PlayerCharacter.generated.h"
+
+USTRUCT()
+struct FGunNode {
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, Category = Stats)
+		bool IsAutomatic;
+	UPROPERTY(EditAnywhere, Category = Stats)
+		float FireRateMultiplier;
+	UPROPERTY(EditAnywhere, Category = Stats)
+		float RangeMultiplier;
+	UPROPERTY(EditAnywhere, Category = Stats)
+		float AccuracyMultiplier;
+	UPROPERTY(EditAnywhere, Category = Stats)
+		float DamageMultiplier;
+	UPROPERTY(EditAnywhere, Category = Stats)
+		float BulletSpeedMultiplier;
+	UPROPERTY(EditAnywhere, Category = Stats)
+		float BulletsPerShotMultiplier;
+};
 
 UCLASS()
 class NEONINJA_API APlayerCharacter : public ACharacter
@@ -26,12 +45,19 @@ public:
 		float BaseLookUpRate;
 	UPROPERTY(EditAnywhere, Category = Weapon)
 		TSubclassOf<class AGunBase> SpawnedWeapon;
-	UPROPERTY(EditAnywhere, Category = Weapon)
+	/*UPROPERTY(EditAnywhere, Category = Weapon)
 		TSubclassOf<class AWeaponNode> RevolverNode;
 	UPROPERTY(EditAnywhere, Category = Weapon)
 		TSubclassOf<class AWeaponNode> RifleNode;
 	UPROPERTY(EditAnywhere, Category = Weapon)
-		TSubclassOf<class AWeaponNode> ShotgunNode;
+		TSubclassOf<class AWeaponNode> ShotgunNode;*/
+	
+	UPROPERTY(EditAnywhere, Category = Gun_Nodes)
+		FGunNode RifleNode;
+	UPROPERTY(EditAnywhere, Category = Gun_Nodes)
+		FGunNode ShotgunNode;
+	UPROPERTY(EditAnywhere, Category = Gun_Nodes)
+		FGunNode RevolverNode;
 
 
 

@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "BulletBase.h"
 #include "WeaponNode.h"
+#include "PlayerCharacter.h"
 #include "GunBase.generated.h"
 
 UCLASS()
@@ -42,16 +43,13 @@ public:
 	void SpawnProjectile();
 	void UnShoot();
 
-	UPROPERTY(EditAnywhere, Category = Stats)
-		TArray<TSubclassOf<AWeaponNode>> WeaponNodes;
-
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void SetBulletValues(ABulletBase* b);
 	bool IfAutomatic();
-	void GetNodeValues(AWeaponNode* node);
+	void GetNodeValues(FGunNode node);
 	void ResetNodes();
 	float CurrentFireRate;
 	float CurrentRange;
@@ -60,12 +58,13 @@ protected:
 	float CurrentBulletSpeed;
 	float CurrentBulletsPerShot;
 	bool CurrentIsAutomatic;
+	TArray<FGunNode> WeaponNodes;
 	
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void Shoot();
-	void SetNode(TSubclassOf<AWeaponNode> node);
+	void SetNode(FGunNode node);
 
 };

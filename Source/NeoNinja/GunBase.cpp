@@ -4,6 +4,7 @@
 #include "GunBase.h"
 #include "GameFramework/Actor.h"
 #include "Math/UnrealMathUtility.h"
+#include "PlayerCharacter.h"
 #include "WeaponNode.h"
 
 // Sets default values
@@ -29,7 +30,7 @@ void AGunBase::Shoot()
 	isFiring = true;
 }
 
-void AGunBase::SetNode(TSubclassOf<AWeaponNode> node)
+void AGunBase::SetNode(FGunNode node)
 {
 	if (WeaponNodes.Num() >= 2) {
 		WeaponNodes.Empty();
@@ -37,9 +38,9 @@ void AGunBase::SetNode(TSubclassOf<AWeaponNode> node)
 	}
 	else {
 		WeaponNodes.Add(node);
-		AWeaponNode* wn = GetWorld()->SpawnActor<AWeaponNode>(node);
-		GetNodeValues(wn);
-		wn->Destroy();
+		//AWeaponNode* wn = GetWorld()->SpawnActor<AWeaponNode>(node);
+		GetNodeValues(node);
+		//wn->Destroy();
 		
 	}
 }
@@ -95,25 +96,23 @@ bool AGunBase::IfAutomatic() {
 	bool isAutomatic = false;
 	for (int i = 0; i < WeaponNodes.Num(); i++)
 	{
-		AWeaponNode* node = GetWorld()->SpawnActor<AWeaponNode>(WeaponNodes[i]);
-		if (node->IsAutomatic) {
+		if (WeaponNodes[i].IsAutomatic) {
 			isAutomatic = true;
 		}
-		node->Destroy();
 	}
 	return isAutomatic;
 }
 
-void AGunBase::GetNodeValues(AWeaponNode* node) {
-	CurrentAccuracy += node->AccuracyMultiplier;
-	CurrentBulletSpeed *= node->BulletSpeedMultiplier;
-	CurrentBulletsPerShot *= node->BulletsPerShotMultiplier;
-	CurrentDamage *= node->DamageMultiplier;
-	CurrentFireRate *= node->FireRateMultiplier;
-	CurrentRange *= node->RangeMultiplier;
+void AGunBase::GetNodeValues(FGunNode node) {
+	CurrentAccuracy += node.AccuracyMultiplier;
+	CurrentBulletSpeed *= node.BulletSpeedMultiplier;
+	CurrentBulletsPerShot *= node.BulletsPerShotMultiplier;
+	CurrentDamage *= node.DamageMultiplier;
+	CurrentFireRate *= node.FireRateMultiplier;
+	CurrentRange *= node.RangeMultiplier;
 	if (!CurrentIsAutomatic)
 	{
-		CurrentIsAutomatic = node->IsAutomatic;
+		CurrentIsAutomatic = node.IsAutomatic;
 	}
 }
 
