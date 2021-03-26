@@ -4,8 +4,8 @@
 #include "GunBase.h"
 #include "GameFramework/Actor.h"
 #include "Math/UnrealMathUtility.h"
+#include "Blueprint/UserWidget.h"
 #include "PlayerCharacter.h"
-#include "WeaponNode.h"
 
 // Sets default values
 AGunBase::AGunBase()
@@ -21,7 +21,25 @@ AGunBase::AGunBase()
 	BaseBulletSpeed = 1.f;
 	BaseBulletsPerShot = 1;
 	BaseIsAutomatic = false;
+	BaseAmmoUsage = 10;
+	AmmoRechargeRate = 10;
+	AmmoRechargeDelay = 3;
 	ResetNodes();
+
+	MaxAmmo = 100;
+	CurrentAmmo = MaxAmmo;
+
+}
+
+// Called when the game starts or when spawned
+void AGunBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (PlayerAmmoWidgetBP != nullptr) {
+		PlayerAmmoWidget = CreateWidget(GetWorld(), PlayerAmmoWidgetBP);
+		PlayerAmmoWidget->AddToPlayerScreen();
+	}
 
 }
 
@@ -38,9 +56,7 @@ void AGunBase::SetNode(FGunNode node)
 	}
 	else {
 		WeaponNodes.Add(node);
-		//AWeaponNode* wn = GetWorld()->SpawnActor<AWeaponNode>(node);
 		GetNodeValues(node);
-		//wn->Destroy();
 		
 	}
 }
@@ -51,12 +67,19 @@ void AGunBase::UnShoot() {
 
 void AGunBase::FireWeapon() {
 	//CurrentIsAutomatic = IfAutomatic();
-	if (CurrentIsAutomatic) {
-		SpawnProjectile();
+	if (CurrentAmmo - CurrentAmmoUsage >= 0) {
+		CurrentAmmo -= CurrentAmmoUsage;
+		if (CurrentIsAutomatic) {
+			SpawnProjectile();
+		}
+		else {
+			SpawnProjectile();
+			UnShoot();
+		}
+		CanRecharge = GetGameTimeSinceCreation() + AmmoRechargeDelay;
 	}
 	else {
-		SpawnProjectile();
-		UnShoot();
+		CurrentAmmo = 0;
 	}
 }
 
@@ -110,6 +133,7 @@ void AGunBase::GetNodeValues(FGunNode node) {
 	CurrentDamage *= node.DamageMultiplier;
 	CurrentFireRate *= node.FireRateMultiplier;
 	CurrentRange *= node.RangeMultiplier;
+	CurrentAmmoUsage *= node.AmmoUsageMultiplier;
 	if (!CurrentIsAutomatic)
 	{
 		CurrentIsAutomatic = node.IsAutomatic;
@@ -124,13 +148,18 @@ void AGunBase::ResetNodes() {
 	CurrentBulletSpeed = BaseBulletSpeed;
 	CurrentBulletsPerShot = BaseBulletsPerShot;
 	CurrentIsAutomatic = BaseIsAutomatic;
+	CurrentAmmoUsage = BaseAmmoUsage;
 }
 
-// Called when the game starts or when spawned
-void AGunBase::BeginPlay()
+void AGunBase::RechargeAmmo()
 {
-	Super::BeginPlay();
-
+	if (CurrentAmmo + AmmoRechargeRate * GetWorld()->GetDeltaSeconds() <= MaxAmmo) {
+		CurrentAmmo += AmmoRechargeRate * GetWorld()->GetDeltaSeconds();
+	}
+	else {
+		CurrentAmmo = MaxAmmo;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Current ammo: %f"), CurrentAmmo);
 }
 
 // Called every frame
@@ -143,6 +172,9 @@ void AGunBase::Tick(float DeltaTime)
 			canFire = GetGameTimeSinceCreation() + 1 / CurrentFireRate;
 			FireWeapon();
 		}
+	}
+	if (GetGameTimeSinceCreation() >= CanRecharge && CurrentAmmo < MaxAmmo) {
+		RechargeAmmo();
 	}
 
 }

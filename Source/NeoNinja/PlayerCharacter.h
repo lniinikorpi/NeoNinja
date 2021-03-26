@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "WeaponNode.h"
 #include "PlayerCharacter.generated.h"
 
 USTRUCT()
 struct FGunNode {
 	GENERATED_BODY()
 public:
+	UPROPERTY(EditAnywhere, Category = Stats)
+		float AmmoUsageMultiplier;
 	UPROPERTY(EditAnywhere, Category = Stats)
 		bool IsAutomatic;
 	UPROPERTY(EditAnywhere, Category = Stats)
@@ -45,12 +46,6 @@ public:
 		float BaseLookUpRate;
 	UPROPERTY(EditAnywhere, Category = Weapon)
 		TSubclassOf<class AGunBase> SpawnedWeapon;
-	/*UPROPERTY(EditAnywhere, Category = Weapon)
-		TSubclassOf<class AWeaponNode> RevolverNode;
-	UPROPERTY(EditAnywhere, Category = Weapon)
-		TSubclassOf<class AWeaponNode> RifleNode;
-	UPROPERTY(EditAnywhere, Category = Weapon)
-		TSubclassOf<class AWeaponNode> ShotgunNode;*/
 	
 	UPROPERTY(EditAnywhere, Category = Gun_Nodes)
 		FGunNode RifleNode;
@@ -60,7 +55,7 @@ public:
 		FGunNode RevolverNode;
 
 
-
+	UPROPERTY(BlueprintReadOnly)
 	AGunBase* CurrentWeapon;
 
 	UFUNCTION()

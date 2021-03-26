@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BulletBase.h"
-#include "WeaponNode.h"
 #include "PlayerCharacter.h"
 #include "GunBase.generated.h"
 
@@ -21,20 +20,32 @@ public:
 		class USkeletalMeshComponent* Mesh;
 	UPROPERTY(EditAnywhere, Category = Components)
 		TSubclassOf<class ABulletBase> bullet;
-	UPROPERTY(EditAnywhere, Category = Stats, meta = (ToolTip = "Rounds per second"))
+	UPROPERTY(BlueprintReadOnly, Category = Stats, meta = (ToolTip = "Rounds per second"))
 		float BaseFireRate;
-	UPROPERTY(EditAnywhere, Category = Stats)
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
 		float BaseRange;
-	UPROPERTY(EditAnywhere, Category = Stats)
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
 		float BaseAccuracy;
-	UPROPERTY(EditAnywhere, Category = Stats)
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
 		float BaseDamage;
-	UPROPERTY(EditAnywhere, Category = Stats)
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
 		float BaseBulletSpeed;
-	UPROPERTY(EditAnywhere, Category = Stats)
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
 		float BaseBulletsPerShot;
-	UPROPERTY(EditAnywhere, Category = Stats)
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
 		bool BaseIsAutomatic;
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
+		float BaseAmmoUsage;
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
+		float AmmoRechargeDelay;
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
+		float CurrentAmmo;
+		float MaxAmmo;
+		float AmmoRechargeRate;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+		TSubclassOf<UUserWidget> PlayerAmmoWidgetBP;
+		UUserWidget* PlayerAmmoWidget;
 
 	float canFire;
 	bool isFiring;
@@ -51,6 +62,7 @@ protected:
 	bool IfAutomatic();
 	void GetNodeValues(FGunNode node);
 	void ResetNodes();
+	void RechargeAmmo();
 	float CurrentFireRate;
 	float CurrentRange;
 	float CurrentAccuracy;
@@ -58,6 +70,8 @@ protected:
 	float CurrentBulletSpeed;
 	float CurrentBulletsPerShot;
 	bool CurrentIsAutomatic;
+	float CurrentAmmoUsage;
+	float CanRecharge;
 	TArray<FGunNode> WeaponNodes;
 	
 

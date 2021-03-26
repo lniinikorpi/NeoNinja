@@ -10,7 +10,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SceneComponent.h"
-#include "WeaponNode.h"
 #include "GunBase.h"
 
 // Sets default values
