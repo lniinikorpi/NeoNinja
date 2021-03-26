@@ -13,7 +13,7 @@ AGunBase::AGunBase()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	isFiring = false;
+	IsFiring = false;
 	BaseFireRate = 1;
 	BaseRange = .5;
 	BaseAccuracy = 2;
@@ -24,6 +24,7 @@ AGunBase::AGunBase()
 	BaseAmmoUsage = 10;
 	AmmoRechargeRate = 10;
 	AmmoRechargeDelay = 3;
+	InfiniteAmmo = true;
 	ResetNodes();
 
 	MaxAmmo = 100;
@@ -45,7 +46,7 @@ void AGunBase::BeginPlay()
 
 void AGunBase::Shoot()
 {
-	isFiring = true;
+	IsFiring = true;
 }
 
 void AGunBase::SetNode(FGunNode node)
@@ -62,12 +63,12 @@ void AGunBase::SetNode(FGunNode node)
 }
 
 void AGunBase::UnShoot() {
-	isFiring = false;
+	IsFiring = false;
 }
 
 void AGunBase::FireWeapon() {
 	//CurrentIsAutomatic = IfAutomatic();
-	if (CurrentAmmo - CurrentAmmoUsage >= 0) {
+	if (CurrentAmmo - CurrentAmmoUsage >= 0 || InfiniteAmmo) {
 		CurrentAmmo -= CurrentAmmoUsage;
 		if (CurrentIsAutomatic) {
 			SpawnProjectile();
@@ -77,9 +78,6 @@ void AGunBase::FireWeapon() {
 			UnShoot();
 		}
 		CanRecharge = GetGameTimeSinceCreation() + AmmoRechargeDelay;
-	}
-	else {
-		CurrentAmmo = 0;
 	}
 }
 
@@ -159,17 +157,16 @@ void AGunBase::RechargeAmmo()
 	else {
 		CurrentAmmo = MaxAmmo;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Current ammo: %f"), CurrentAmmo);
 }
 
 // Called every frame
 void AGunBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (isFiring)
+	if (IsFiring)
 	{
-		if (GetGameTimeSinceCreation() > canFire) {
-			canFire = GetGameTimeSinceCreation() + 1 / CurrentFireRate;
+		if (GetGameTimeSinceCreation() > CanFire) {
+			CanFire = GetGameTimeSinceCreation() + 1 / CurrentFireRate;
 			FireWeapon();
 		}
 	}

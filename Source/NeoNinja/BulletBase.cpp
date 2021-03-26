@@ -3,16 +3,17 @@
 
 #include "BulletBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 ABulletBase::ABulletBase()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	projectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
-	//mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	capsule->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
+	capsule->CanCharacterStepUpOn = ECB_No;
 	RootComponent = capsule;
+
+	projectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	projectileMovement->UpdatedComponent = capsule;
 	projectileMovement->InitialSpeed = 1000.f;
 	projectileMovement->MaxSpeed = 1000.f;
@@ -24,6 +25,8 @@ ABulletBase::ABulletBase()
 void ABulletBase::BeginPlay()
 {
 	Super::BeginPlay();
+	capsule->BodyInstance.SetCollisionProfileName("Projectile");
+	capsule->OnComponentHit.AddDynamic(this, &ABulletBase::OnHit);
 
 }
 
@@ -34,10 +37,13 @@ void ABulletBase::SetSpeed(float value) {
 	projectileMovement->Velocity *= BulletSpeedMultiplier;
 }
 
-// Called every frame
-void ABulletBase::Tick(float DeltaTime)
+void ABulletBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
 {
-	Super::Tick(DeltaTime);
-
+	UE_LOG(LogTemp, Warning, TEXT("moro"));
+	if(!OtherActor->ActorHasTag("Bullet"))
+	{
+		Destroy();
+	}
 }
 

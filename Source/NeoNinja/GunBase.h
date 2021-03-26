@@ -16,6 +16,7 @@ class NEONINJA_API AGunBase : public AActor
 public:
 	// Sets default values for this actor's properties
 	AGunBase();
+	
 	UPROPERTY(EditAnywhere, Category = Components)
 		class USkeletalMeshComponent* Mesh;
 	UPROPERTY(EditAnywhere, Category = Components)
@@ -42,13 +43,14 @@ public:
 		float CurrentAmmo;
 		float MaxAmmo;
 		float AmmoRechargeRate;
+	bool InfiniteAmmo;
 
 	UPROPERTY(EditAnywhere, Category = "UI")
 		TSubclassOf<UUserWidget> PlayerAmmoWidgetBP;
 		UUserWidget* PlayerAmmoWidget;
 
-	float canFire;
-	bool isFiring;
+	float CanFire;
+	bool IsFiring;
 
 	void FireWeapon();
 	void SpawnProjectile();

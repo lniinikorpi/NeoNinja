@@ -18,21 +18,19 @@ public:
 	ABulletBase();
 	/*UPROPERTY(VisibleAnywhere, Category = Bullet)
 		UStaticMeshComponent* mesh;*/
-	UPROPERTY(EditAnywhere, Category = Bullet)
+	UPROPERTY(EditAnywhere, Category = Projectile)
 		UProjectileMovementComponent* projectileMovement;
-	UPROPERTY(EditAnywhere, Category = Bullet)
+	UPROPERTY(EditAnywhere, Category = Projectile)
 		UCapsuleComponent* capsule;
 	void SetSpeed(float value);
 
+	UFUNCTION()
+		void OnHit(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	float BulletSpeedMultiplier;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 };
