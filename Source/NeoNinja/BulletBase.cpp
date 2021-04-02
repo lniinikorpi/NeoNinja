@@ -40,7 +40,6 @@ void ABulletBase::SetSpeed(float value) {
 void ABulletBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("moro"));
 	if(!OtherActor->ActorHasTag("Bullet"))
 	{
 		Destroy();
