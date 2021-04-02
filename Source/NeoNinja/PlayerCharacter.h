@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "PlayerCharacter.generated.h"
 
 USTRUCT()
@@ -83,6 +84,10 @@ protected:
 	FVector LookVector;
 	FVector RotVector;
 	bool TurnLeftStick;
+private:
+	class UAIPerceptionStimuliSourceComponent* Stimulus;
+
+	void Setup_Stimulus();
 
 
 public:	

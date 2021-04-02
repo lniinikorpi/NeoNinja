@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "NPC_AIController.generated.h"
 
 /**
@@ -26,4 +27,11 @@ class NEONINJA_API ANPC_AIController : public AAIController
 	class UBehaviorTree* BehaviorTree;
 
 	class UBlackboardComponent* BlackboardComponent;
+
+	class UAISenseConfig_Sight* SightConfig;
+
+	UFUNCTION()
+	void On_Target_Detected(AActor* actor, FAIStimulus const Stimulus);
+
+	void SetupPerceptionSystem();
 };

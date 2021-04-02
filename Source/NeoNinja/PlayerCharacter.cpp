@@ -11,6 +11,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SceneComponent.h"
 #include "GunBase.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -40,6 +42,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 	TurnLeftStick = false;
+
+	Setup_Stimulus();
 
 }
 
@@ -161,6 +165,13 @@ void APlayerCharacter::MoveForward(float value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, value);
 	}
+}
+
+void APlayerCharacter::Setup_Stimulus()
+{
+	Stimulus = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Perception Stimulus"));
+	Stimulus->RegisterForSense(TSubclassOf<UAISense_Sight>());
+	Stimulus->RegisterWithPerceptionSystem();
 }
 
 // Called every frame
