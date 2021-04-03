@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "PatrolPath.h"
 #include "GameFramework/Character.h"
 #include "Enemy.generated.h"
 
@@ -14,16 +16,20 @@ class NEONINJA_API AEnemy : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEnemy();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	APatrolPath* GetPatrolPath();
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess = "true"))
+	APatrolPath* PatrolPath;
 
 };
